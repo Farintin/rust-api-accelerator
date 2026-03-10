@@ -1,0 +1,10 @@
+services:
+  baselineapi:
+    image: baselineapi
+    build:
+      context: node-baseline-api
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
