@@ -1,13 +1,52 @@
-const pool = require("../db");
+const {
+  getProducts,
+  getProductsFromDB,
+  getProductsHeavy,
+} = require("../services/productService");
 
-async function getProducts(req, res) {
+async function getProductsCache(req, res) {
   try {
-    const result = await pool.query("SELECT * FROM products LIMIT 100");
-    res.json(result.rows);
+    const products = await getProducts();
+    res.json(products);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Database error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
-module.exports = { getProducts };
+async function getProductsDB(req, res) {
+  try {
+    const products = await getProductsFromDB();
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function getProductsHandler(req, res) {
+  try {
+    const products = await getProducts();
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function getProductsHeavyHandler(req, res) {
+  try {
+    const products = await getProductsHeavy();
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+module.exports = {
+  getProductsCache,
+  getProductsDB,
+  getProductsHandler,
+  getProductsHeavyHandler,
+};
